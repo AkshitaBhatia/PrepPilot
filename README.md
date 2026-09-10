@@ -1,4 +1,40 @@
-# PrepPilot
+# 🚀 PrepPilot – AI Study Tracker
+
+> An AI-powered study tracking and productivity platform designed to help students organize, monitor, and improve their learning journey.
+
+### 🌐 Live Demo
+
+👉 **[Open PrepPilot Live]https://preppilot-57bh.onrender.com
+
+### 💻 Source Code
+
+👉 **[View Source Code on GitHub](https://github.com/AkshitaBhatia/PrepPilot)**
+
+---
+
+## ✨ Features
+
+- 📚 Study tracking
+- 📊 Progress monitoring
+- 🎯 Personalized learning management
+- 📝 Task and study organization
+- 🤖 AI-powered study assistance
+- 📱 Responsive web experience
+
+## 🛠️ Tech Stack
+
+- React Native / Expo
+- TypeScript
+- Expo Router
+- SQL.js
+- Drizzle ORM
+- pnp
+
+## 🚀 Getting Started
+
+```bash
+pnpm install
+pnpm --filter @preppilot/mobile web:demo# PrepPilot
 
 **Offline-first study tracking for students.** Organise a syllabus as
 `Subject → Chapter → Topic`, check off what you have actually finished, time your
