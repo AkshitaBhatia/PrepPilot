@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "75f3e448-15ee-4212-806d-f88955ad9d21"
+      }
+    },
+    "android": {
+      "package": "com.preppilot.app"
+    }
+  }
+}

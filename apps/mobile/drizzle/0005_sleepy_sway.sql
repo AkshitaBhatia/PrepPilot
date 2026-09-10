@@ -1,0 +1,1 @@
+ALTER TABLE `subtopics` ADD `note` text;

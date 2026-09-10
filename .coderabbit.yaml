@@ -1,0 +1,52 @@
+# CodeRabbit review configuration.
+# Docs: https://docs.coderabbit.ai/guides/configure-coderabbit
+language: en-GB
+
+reviews:
+  profile: assertive
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  poem: false
+  collapse_walkthrough: false
+
+  path_filters:
+    - '!pnpm-lock.yaml'
+    - '!**/dist/**'
+    - '!**/coverage/**'
+
+  path_instructions:
+    - path: 'packages/shared/src/progress/**'
+      instructions: >-
+        This is the progress engine and it is the correctness core of the product.
+        Subject progress must be topic-weighted (total completed topics / total
+        topics), never the mean of chapter percentages. A scope with zero topics
+        must yield a null percent, never 0. Scrutinise any change to rounding,
+        division, or empty-scope handling especially closely.
+    - path: '**/*.test.ts'
+      instructions: >-
+        Verify tests assert real behaviour and cover edge cases (empty inputs,
+        zero denominators, boundary rounding) rather than restating the
+        implementation.
+    - path: 'supabase/**'
+      instructions: >-
+        Every table holding user data must have Row Level Security enabled with
+        policies scoping access to auth.uid(). Flag any table or policy that
+        would let one user read or write another user's rows.
+
+  auto_review:
+    enabled: true
+    drafts: false
+    # Work lands as a stack of PRs, each based on the previous feature branch
+    # rather than on main. Without these patterns CodeRabbit reports
+    # "reviews are disabled for this base branch" and skips every PR after the
+    # first, while still reporting a passing check — so the review looks done
+    # when nothing was reviewed.
+    base_branches:
+      - 'main'
+      - 'feat/.*'
+      - 'fix/.*'
+      - 'chore/.*'
+
+chat:
+  auto_reply: true

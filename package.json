@@ -1,0 +1,25 @@
+{
+  "name": "preppilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PrepPilot \u2014 offline-first AI-assisted study tracking application",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "test:coverage": "pnpm -r --if-present test:coverage",
+    "lint": "pnpm -r --if-present lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "test:functions": "deno test --allow-env --allow-net supabase/functions/",
+    "ai:proxy": "deno run --allow-net --allow-env --env-file=apps/mobile/.env supabase/functions/ask-gemini/index.ts"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  }
+}

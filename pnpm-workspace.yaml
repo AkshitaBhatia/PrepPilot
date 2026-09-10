@@ -1,0 +1,21 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Expo's Metro bundler cannot resolve transitive dependencies through pnpm's
+# default isolated store, so this workspace uses a flat node_modules layout.
+# https://docs.expo.dev/guides/monorepos/
+nodeLinker: hoisted
+
+# Dependency install scripts are blocked by default. esbuild (used by Vitest)
+# ships prebuilt platform binaries as optional dependencies, so its install
+# script is only a verification step and is safe to allow.
+allowBuilds:
+  better-sqlite3: true
+  dtrace-provider: true
+  esbuild: true
+
+# pnpm re-runs `install` before every script to verify the lockfile. That check
+# deadlocks on its own store lock in this workspace, and CI installs with
+# --frozen-lockfile anyway, so it is disabled.
+verifyDepsBeforeRun: false

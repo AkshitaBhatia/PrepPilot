@@ -1,0 +1,30 @@
+# Supabase local development configuration.
+# https://supabase.com/docs/guides/local-development
+
+project_id = "preppilot"
+
+[db]
+port = 54322
+major_version = 17
+
+[auth]
+enabled = true
+# Overridden per environment; this value is only used by `supabase start`.
+site_url = "preppilot://"
+additional_redirect_urls = ["preppilot://"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+# Must match PASSWORD_MIN_LENGTH in @preppilot/shared. If the two drift, the
+# client accepts a password the server then rejects, with no useful message.
+minimum_password_length = 8
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+
+[auth.sms]
+# Phone sign-in stays disabled until an SMS provider is provisioned
+# (DECISIONS.md, D26). The client gates the same flow behind EXPO_PUBLIC_ENABLE_PHONE_OTP.
+enable_signup = false
+enable_confirmations = false

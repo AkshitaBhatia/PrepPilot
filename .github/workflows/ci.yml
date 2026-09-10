@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Typecheck, test and format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test with coverage
+        run: pnpm test:coverage
+
+      # The Edge Function runs on Deno, not Node, so it is invisible to the
+      # suite above. It is also the only code that ever holds the Gemini key.
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Test the Edge Functions
+        run: pnpm test:functions
+
+      # Metro resolution through a pnpm workspace is fragile; a green test suite
+      # does not prove the app still bundles. This catches that separately.
+      - name: Verify the Android bundle builds
+        run: pnpm --filter @preppilot/mobile exec expo export --platform android --output-dir /tmp/expo-export
+
+      # The browser build has its own database driver, excluded from unit
+      # coverage because it needs WebAssembly and a DOM. Building it here is what
+      # keeps that path from rotting unnoticed.
+      # --clear because EXPO_PUBLIC_* values are inlined at transform time and
+      # Metro's cache carries the previous build's values into the next one. A
+      # build that flips one of them and reuses the cache ships the old value.
+      - name: Verify the web bundle builds
+        run: pnpm --filter @preppilot/mobile exec expo export --platform web --clear --output-dir /tmp/expo-web
+        env:
+          EXPO_PUBLIC_DEMO_MODE: 'true'
